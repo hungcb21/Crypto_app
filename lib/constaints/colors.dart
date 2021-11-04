@@ -2,5 +2,6 @@ import 'package:flutter/cupertino.dart';
 
 class ColorsApp{
   static const Color backgroundColor = Color(0xff111427);
+  static const Color backgroundBottomColor = Color(0xfff8f9fd);
 
 }

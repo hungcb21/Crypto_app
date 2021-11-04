@@ -9,9 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      debugShowCheckedModeBanner: false,
       home: BlocProvider(
           create: (context) => ListCoinsBloc()..add(FetchListCoins()),
           child: HomeScreen()),

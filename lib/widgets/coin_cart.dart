@@ -16,13 +16,34 @@ class CoinCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 7,
+            offset: Offset(0, 4), // changes position of shadow
+          ),
+        ],
+      ),
       child: ListTile(
-        leading: Image.network(image??'https://github.com/flutter/plugins/raw/master/packages/video_player/video_player/doc/demo_ipod.gif?raw=true')
-        ,
+        leading: Image.network(image ??
+            'https://github.com/flutter/plugins/raw/master/packages/video_player/video_player/doc/demo_ipod.gif?raw=true'),
         title: Text(name),
-        subtitle: Text('${price} ${symbol.toUpperCase()}'),
-        trailing: Text(price_change.toString(),style: TextStyle(color: price_change.toString().contains('-')?Colors.red:Colors.green),),
+        subtitle: Text('${price}  ${symbol.toUpperCase()}'),
+        trailing: Text(
+          price_change.toString(),
+          style: TextStyle(
+              color: price_change.toString().contains('-')
+                  ? Colors.red
+                  : Colors.green),
+        ),
       ),
     );
   }
