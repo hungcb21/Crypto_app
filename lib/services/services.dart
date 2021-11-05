@@ -17,7 +17,6 @@ Future<List<Coins>> getCoinsFromAPI(
     final response = await httpClient.get(url);
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body) as List;
-
       List<Coins> listCoins = responseData.map((coins) {
         return Coins.fromJson(coins);
       }).toList();

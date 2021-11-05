@@ -8,11 +8,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-          create: (context) => ListCoinsBloc()..add(FetchListCoins()),
-          child: HomeScreen()),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: BlocProvider(
+            create: (context) => ListCoinsBloc()..add(FetchListCoins()),
+            child: HomeScreen()),
+      ),
     );
   }
 }

@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:crypto_test/model/sparkline_in_7d.dart';
 import 'package:flutter/cupertino.dart';
 
 class Coins {
@@ -16,6 +19,7 @@ class Coins {
   var atl_change_percentage;
   var atl_date;
   var last_updated;
+  // String sparkLine;
 
   Coins(
       {required this.id,
@@ -32,7 +36,8 @@ class Coins {
       required this.atl,
       required this.atl_change_percentage,
       required this.atl_date,
-      required this.last_updated});
+      required this.last_updated,
+      });
 
   factory Coins.fromJson(Map<String, dynamic> json) {
     return Coins(
@@ -50,6 +55,7 @@ class Coins {
         high_24h: json['high_24h'],
         last_updated: json['last_updated'],
         low_24h: json['low_24h'],
-        price_change_24h: json['price_change_24h']);
+        price_change_24h: json['price_change_24h'],
+        );
   }
 }

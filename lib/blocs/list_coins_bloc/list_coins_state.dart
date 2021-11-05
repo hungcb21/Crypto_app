@@ -20,7 +20,6 @@ class ListCoinsLoaded extends ListCoinsState {
   @override
   // TODO: implement props
   List<Object> get props => [listCoins, hasReachedEnd];
-
   ListCoinsLoaded cloneWith({List<Coins>? listCoins, bool? hasReachedEnd}) {
     return ListCoinsLoaded(
         listCoins ?? this.listCoins, hasReachedEnd ?? this.hasReachedEnd);

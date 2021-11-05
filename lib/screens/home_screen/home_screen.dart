@@ -4,7 +4,9 @@ import 'package:crypto_test/blocs/list_coins_bloc/list_coins_state.dart';
 import 'package:crypto_test/constaints/colors.dart';
 import 'package:crypto_test/constaints/strings.dart';
 import 'package:crypto_test/constaints/text_style.dart';
+import 'package:crypto_test/screens/detail_screen/detail_screen.dart';
 import 'package:crypto_test/widgets/coin_cart.dart';
+import 'package:crypto_test/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,7 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               height: 200,
               child: Column(
-                children: [],
+                children: [
+                  BlocBuilder<ListCoinsBloc, ListCoinsState>(
+                      builder: (context, state) {
+                    if (state is ListCoinsLoaded) {
+                      return SearchBar(state.listCoins);
+                    }
+                    return SearchBar([]);
+                  }),
+                ],
               ),
             ),
             Expanded(
@@ -70,11 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (BuildContext context, state) {
                           if (state is ListCoinsLoaded) {
                             final currentState = state as ListCoinsLoaded;
-                            if (state.listCoins.isEmpty) {
-                              return Center(
-                                child: Text("Khong co gi dau ban ei"),
-                              );
-                            }
                             return ListView.builder(
                               itemCount: state.hasReachedEnd
                                   ? state.listCoins.length
@@ -95,19 +100,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   );
                                 } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    child: CoinCart(
-                                      image:
-                                          currentState.listCoins[index].image,
-                                      name: currentState.listCoins[index].name,
-                                      symbol:
-                                          currentState.listCoins[index].symbol,
-                                      price: currentState
-                                          .listCoins[index].current_price,
-                                      price_change: currentState
-                                          .listCoins[index].price_change_24h,
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailScreen()));
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      child: CoinCart(
+                                        image:
+                                            currentState.listCoins[index].image,
+                                        name:
+                                            currentState.listCoins[index].name,
+                                        symbol: currentState
+                                            .listCoins[index].symbol,
+                                        price: currentState
+                                            .listCoins[index].current_price,
+                                        price_change: currentState
+                                            .listCoins[index].price_change_24h,
+                                      ),
                                     ),
                                   );
                                 }
