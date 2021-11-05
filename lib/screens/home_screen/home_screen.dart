@@ -1,4 +1,5 @@
 import 'package:crypto_test/blocs/list_coins_bloc/list_coins_bloc.dart';
+import 'package:crypto_test/blocs/list_coins_bloc/list_coins_event.dart';
 import 'package:crypto_test/blocs/list_coins_bloc/list_coins_state.dart';
 import 'package:crypto_test/constaints/colors.dart';
 import 'package:crypto_test/constaints/strings.dart';
@@ -13,11 +14,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _scrollController = ScrollController();
+  final _scrollThreadHold = 500.0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // context.read<ListCoinsBloc>().add(FetchListCoins());
+    ListCoinsBloc _bloc = BlocProvider.of(context);
+    _scrollController.addListener(() {
+      final maxScrollExtent = _scrollController.position.maxScrollExtent;
+      final currentScroll = _scrollController.position.pixels;
+      if (maxScrollExtent - currentScroll <= _scrollThreadHold) {
+        _bloc.add(FetchListCoins());
+      }
+    });
   }
 
   @override
@@ -49,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Text(
+                      child: const Text(
                         StringData.listCoinsTitle,
                         style: TextStylesApp.listCoinsTitle,
                       ),
@@ -58,29 +69,63 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: BlocBuilder<ListCoinsBloc, ListCoinsState>(
                         builder: (BuildContext context, state) {
                           if (state is ListCoinsLoaded) {
+                            final currentState = state as ListCoinsLoaded;
+                            if (state.listCoins.isEmpty) {
+                              return Center(
+                                child: Text("Khong co gi dau ban ei"),
+                              );
+                            }
                             return ListView.builder(
-                              itemCount: state.listCoins.length,
+                              itemCount: state.hasReachedEnd
+                                  ? state.listCoins.length
+                                  : state.listCoins.length + 1,
+                              controller: _scrollController,
                               itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: CoinCart(
-                                    image: state.listCoins[index].image,
-                                    name: state.listCoins[index].name,
-                                    symbol: state.listCoins[index].symbol,
-                                    price: state.listCoins[index].current_price,
-                                    price_change:
-                                        state.listCoins[index].price_change_24h,
-                                  ),
-                                );
+                                ///if scroll to end but still wait api response, it show process indicator
+                                if (index >= state.listCoins.length) {
+                                  return Container(
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 1.5,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: CoinCart(
+                                      image:
+                                          currentState.listCoins[index].image,
+                                      name: currentState.listCoins[index].name,
+                                      symbol:
+                                          currentState.listCoins[index].symbol,
+                                      price: currentState
+                                          .listCoins[index].current_price,
+                                      price_change: currentState
+                                          .listCoins[index].price_change_24h,
+                                    ),
+                                  );
+                                }
                               },
                             );
                           } else if (state is ListCoinsLoading) {
                             return Center(
                               child: CircularProgressIndicator(),
                             );
+                          } else if (state is ListCoinsLoadFail) {
+                            return Center(
+                              child: Text(
+                                state.error,
+                                style: TextStylesApp.listCoinsError,
+                              ),
+                            );
                           }
-                          return Center(child: Text('Other statessad as..'));
+                          return Center(child: Text(StringData.listEmpty));
                         },
                       ),
                     ),
