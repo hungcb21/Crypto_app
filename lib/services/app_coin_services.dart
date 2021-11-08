@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:crypto_test/config/app_config.dart';
 import 'package:crypto_test/config/constants.dart';
 import 'package:crypto_test/model/coins.dart';
+import 'package:crypto_test/services/coin_service.dart';
 import 'package:http/http.dart' as http;
 
 final String FINAL_API_URL = 'https://api.coingecko.com/api/v3/coins';
 class AppCoinService{
-  Future<List<Coins>> getCoinsFromAPI(
+  Future<List<Coins>> getCoinsFromAPI (
       {required String currency,
         required int start,
         required int limit,
