@@ -1,5 +1,7 @@
+import 'package:crypto_test/constaints/strings.dart';
 import 'package:crypto_test/constaints/text_style.dart';
 import 'package:crypto_test/model/coins.dart';
+import 'package:crypto_test/screens/detail_screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
@@ -17,13 +19,23 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          SizedBox(
+            width: 20,
+          ),
           Icon(
             Icons.search,
             size: 30,
             color: Colors.blueAccent,
+          ),
+          SizedBox(
+            width: 10,
           ),
           Flexible(
             child: Autocomplete<Coins>(
@@ -33,10 +45,13 @@ class _SearchBarState extends State<SearchBar> {
                   FocusNode fieldFocusNode,
                   VoidCallback onFieldSubmitted) {
                 return TextField(
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: StringData.hintTextSearch),
                   controller: fieldTextEditingController,
                   focusNode: fieldFocusNode,
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+                      fontWeight: FontWeight.bold, color: Colors.black),
                 );
               },
               optionsBuilder: (TextEditingValue textEditingValue) {
@@ -85,8 +100,10 @@ class _SearchBarState extends State<SearchBar> {
                 );
               },
               onSelected: (Coins selection) {
-                print(
-                    'You just selected ${_displayStringForOption(selection)}');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DetailScreen(selection)));
               },
             ),
           ),

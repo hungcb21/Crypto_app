@@ -106,7 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  DetailScreen()));
+                                                  DetailScreen(
+                                                      state.listCoins[index])));
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
