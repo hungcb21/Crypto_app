@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final maxScrollExtent = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
       if (maxScrollExtent - currentScroll <= _scrollThreadHold) {
-        _bloc.add(FetchListCoins());
+        _bloc.add(FetchListCoins(sparkline: true,currency: 'usd'));
       }
     });
   }

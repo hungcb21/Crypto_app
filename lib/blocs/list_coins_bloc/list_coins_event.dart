@@ -6,4 +6,9 @@ abstract class ListCoinsEvent extends Equatable{
   List<Object?> get props => [];
 }
 
-class FetchListCoins extends ListCoinsEvent{}
+class FetchListCoins extends ListCoinsEvent{
+  String currency;
+  bool sparkline;
+
+  FetchListCoins({required this.currency,required this.sparkline});
+}

@@ -19,10 +19,10 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
           yield ListCoinsLoading();
           ///get coins when list empty and not scroll to end
           final coins = await service.getCoinsFromAPI(
-              currency: 'usd',
+              currency: event.currency,
               start: 1,
               limit: NUMBER_OF_COINS_PER_STATE,
-              sparkline: true);
+              sparkline: event.sparkline);
           yield ListCoinsLoaded(coins, false);
         } else if (state is ListCoinsLoaded) {
           final currentState = state as ListCoinsLoaded;
@@ -32,10 +32,10 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
 
           ///get list when scroll to end of list
           final coins = await service.getCoinsFromAPI(
-              currency: 'usd',
+              currency: event.currency,
               start: finalIndexOfCurrentPage,
               limit: NUMBER_OF_COINS_PER_STATE,
-              sparkline: true);
+              sparkline: event.sparkline);
           if (coins.isEmpty) {
             yield currentState.cloneWith(hasReachedEnd: true);
           } else {
