@@ -114,11 +114,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                           vertical: 10),
                                       child: CoinCart(
                                         image:
-                                            currentState.listCoins![index].image,
+                                            currentState.listCoins![index].image!,
                                         name:
-                                            currentState.listCoins![index].name,
+                                            currentState.listCoins![index].name!,
                                         symbol: currentState
-                                            .listCoins![index].symbol,
+                                            .listCoins![index].symbol!,
                                         price: currentState
                                             .listCoins![index].current_price,
                                         price_change: currentState

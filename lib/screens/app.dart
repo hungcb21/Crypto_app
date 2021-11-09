@@ -4,11 +4,12 @@ import 'package:crypto_test/screens/home_screen/home_screen.dart';
 import 'package:crypto_test/services/app_coin_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:http/http.dart' as http;
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final httpClient = http.Client();
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: BlocProvider(
-            create: (context) => ListCoinsBloc(service: AppCoinService())
+            create: (context) => ListCoinsBloc(service: AppCoinService(httpClient))
               ..add(FetchListCoins(currency: 'usd', sparkline: true)),
             child: HomeScreen()),
       ),

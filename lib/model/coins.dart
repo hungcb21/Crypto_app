@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
 class Coins {
-  String id;
-  String name;
-  String symbol;
-  var image;
+  String? id;
+  String? name;
+  String? symbol;
+  String? image;
   var current_price;
   var high_24h;
   var low_24h;

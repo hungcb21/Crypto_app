@@ -14,7 +14,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  String _displayStringForOption(Coins option) => option.name;
+  String _displayStringForOption(Coins option) => option.name!;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class _SearchBarState extends State<SearchBar> {
                               leading: Image.network(option.image ??
                                   'https://github.com/flutter/plugins/raw/master/packages/video_player/video_player/doc/demo_ipod.gif?raw=true'),
                               title: Text(
-                                option.name,
+                                option.name!,
                                 style: TextStylesApp.nameCoin,
                               ),
                             ),

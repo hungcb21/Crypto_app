@@ -33,7 +33,7 @@ class _DetailScreenState extends State<DetailScreen> {
             SystemUiOverlayStyle(statusBarColor: Colors.transparent),
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: Text(widget._coins.name),
+        title: Text(widget._coins.name!),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,

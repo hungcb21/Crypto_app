@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
   ListCoinsBloc({this.service}) : super(ListCoinsEmpty());
   final NUMBER_OF_COINS_PER_STATE = 20;
-  CoinSevice? service;
+  CoinService? service;
 
   @override
   Stream<ListCoinsState> mapEventToState(ListCoinsEvent event) async* {
@@ -19,16 +19,12 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
           yield ListCoinsLoading();
 
           ///get coins when list empty and not scroll to end
-          try {
-            final coins = await service!.getCoinsFromAPI(
-                currency: event.currency!,
-                start: 1,
-                limit: NUMBER_OF_COINS_PER_STATE,
-                sparkline: event.sparkline!);
-            yield ListCoinsLoaded(listCoins: coins, hasReachedEnd: false);
-          } catch (e) {
-            yield ListCoinsLoadFail(error: e.toString());
-          }
+          final coins = await service!.getCoinsFromAPI(
+              currency: event.currency!,
+              start: 1,
+              limit: NUMBER_OF_COINS_PER_STATE,
+              sparkline: event.sparkline!);
+          yield ListCoinsLoaded(listCoins: coins, hasReachedEnd: false);
         } else if (state is ListCoinsLoaded) {
           final currentState = state as ListCoinsLoaded;
 
@@ -41,6 +37,7 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
               start: finalIndexOfCurrentPage,
               limit: NUMBER_OF_COINS_PER_STATE,
               sparkline: event.sparkline!);
+          ///if over of list from api stop call api
           if (coins!.isEmpty) {
             yield currentState.cloneWith(hasReachedEnd: true);
           } else {

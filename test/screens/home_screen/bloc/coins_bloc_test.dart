@@ -6,13 +6,11 @@ import 'package:crypto_test/services/coin_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-// class MockCoinService extends Mock implements AppCoinService {}
-class MockCointEvent extends ListCoinsEvent {}
 
-class MockCoinService extends Mock implements CoinSevice {}
+class MockCoinService extends Mock implements CoinService {}
 
 void main() {
-  CoinSevice coinsService;
+  CoinService coinsService;
   ListCoinsBloc? coinsBloc;
 
   setUp(() {
@@ -28,7 +26,7 @@ void main() {
       build: () => ListCoinsBloc(), expect: () => []);
 
   blocTest(
-    'emits [ListCoinLoading] then [ListCoinLoaded] when [FetchListCoins] is called',
+    'emits [ListCoinLoading] then [ListCoinsLoadFail] when [FetchListCoins] is called',
     build: () {
       coinsService = MockCoinService();
       return ListCoinsBloc(service: coinsService);
@@ -36,6 +34,17 @@ void main() {
     act: (ListCoinsBloc bloc) =>
         bloc.add(FetchListCoins(currency: 'usd', sparkline: true)),
     expect: () => [ListCoinsLoading(), ListCoinsLoaded(hasReachedEnd: false)],
+  );
+
+  blocTest(
+    'emits [ListCoinLoading] then [ListCoinLoaded] when [FetchListCoins] is called',
+    build: () {
+      coinsService = MockCoinService();
+      return ListCoinsBloc(service: coinsService);
+    },
+    act: (ListCoinsBloc bloc) =>
+        bloc.add(FetchListCoins(currency: null,sparkline: null)),
+    expect: () => [ListCoinsLoading(), ListCoinsLoadFail()],
   );
 
   blocTest(

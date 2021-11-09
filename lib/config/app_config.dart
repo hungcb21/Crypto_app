@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:crypto_test/config/constants.dart';
+import 'constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

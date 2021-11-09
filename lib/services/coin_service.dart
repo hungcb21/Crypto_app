@@ -1,6 +1,9 @@
 import 'package:crypto_test/model/coins.dart';
 import 'package:http/http.dart' as http;
-abstract class CoinSevice{
+abstract class CoinService{
+  final http.Client client;
+
+  CoinService(this.client);
   Future<List<Coins>>? getCoinsFromAPI({required String currency,
     required int start,
     required int limit,

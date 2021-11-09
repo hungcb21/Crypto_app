@@ -2,7 +2,7 @@ import 'package:crypto_test/constaints/text_style.dart';
 import 'package:flutter/material.dart';
 
 class CoinCart extends StatelessWidget {
-  var image;
+  String image;
   String name;
   String symbol;
   var price;
@@ -34,9 +34,15 @@ class CoinCart extends StatelessWidget {
         ],
       ),
       child: ListTile(
-        leading: Image.network(image ??
-            'https://github.com/flutter/plugins/raw/master/packages/video_player/video_player/doc/demo_ipod.gif?raw=true'),
-        title: Text(name,style: TextStylesApp.nameCoin,),
+        leading: Image.network(
+          image,
+          errorBuilder: (context, error, strackTrace) =>
+              Icon(Icons.error),
+        ),
+        title: Text(
+          name,
+          style: TextStylesApp.nameCoin,
+        ),
         subtitle: Text('${price}  ${symbol.toUpperCase()}'),
         trailing: Text(
           price_change.toString(),
