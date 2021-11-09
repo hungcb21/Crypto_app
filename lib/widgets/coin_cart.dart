@@ -1,8 +1,8 @@
-import 'package:crypto_test/constaints/text_style.dart';
+import '../constaints/text_style.dart';
 import 'package:flutter/material.dart';
 
 class CoinCart extends StatelessWidget {
-  String image;
+  String? image;
   String name;
   String symbol;
   var price;
@@ -35,9 +35,8 @@ class CoinCart extends StatelessWidget {
       ),
       child: ListTile(
         leading: Image.network(
-          image,
-          errorBuilder: (context, error, strackTrace) =>
-              Icon(Icons.error),
+          image!,
+          errorBuilder: (context, error, strackTrace) => Icon(Icons.error),
         ),
         title: Text(
           name,

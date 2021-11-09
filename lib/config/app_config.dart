@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'constants.dart';
 
 class AppConfig {
   static final AppConfig _singleton = AppConfig._internal();

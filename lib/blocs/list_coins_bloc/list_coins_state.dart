@@ -1,4 +1,4 @@
-import 'package:crypto_test/model/coins.dart';
+import '../../model/coins.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ListCoinsState extends Equatable {
@@ -13,17 +13,8 @@ class ListCoinsLoading extends ListCoinsState {}
 
 class ListCoinsLoaded extends ListCoinsState {
   final List<Coins>? listCoins;
-  final bool? hasReachedEnd;
+  ListCoinsLoaded({this.listCoins});
 
-   ListCoinsLoaded({this.listCoins, this.hasReachedEnd});
-
-  @override
-  // TODO: implement props
-  List<Object?> get props => [listCoins, hasReachedEnd];
-  ListCoinsLoaded cloneWith({List<Coins>? listCoins, bool? hasReachedEnd}) {
-    return ListCoinsLoaded(
-        listCoins: listCoins ?? this.listCoins,hasReachedEnd:  hasReachedEnd ?? this.hasReachedEnd);
-  }
 }
 
 class ListCoinsLoadFail extends ListCoinsState {

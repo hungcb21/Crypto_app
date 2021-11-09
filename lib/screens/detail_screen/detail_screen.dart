@@ -1,5 +1,5 @@
-import 'package:crypto_test/constaints/colors.dart';
-import 'package:crypto_test/model/coins.dart';
+import '../../constaints/colors.dart';
+import '../../model/coins.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';

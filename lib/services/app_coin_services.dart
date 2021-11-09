@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:crypto_test/config/app_config.dart';
-import 'package:crypto_test/config/constants.dart';
-import 'package:crypto_test/model/coins.dart';
-import 'package:crypto_test/services/coin_service.dart';
+import '../config/app_config.dart';
+import '../config/constants.dart';
+import '../model/coins.dart';
+import 'coin_service.dart';
 import 'package:http/http.dart' as http;
 
 final String FINAL_API_URL = 'https://api.coingecko.com/api/v3';

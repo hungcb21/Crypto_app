@@ -1,12 +1,12 @@
-import 'package:crypto_test/blocs/list_coins_bloc/list_coins_bloc.dart';
-import 'package:crypto_test/blocs/list_coins_bloc/list_coins_event.dart';
-import 'package:crypto_test/blocs/list_coins_bloc/list_coins_state.dart';
-import 'package:crypto_test/constaints/colors.dart';
-import 'package:crypto_test/constaints/strings.dart';
-import 'package:crypto_test/constaints/text_style.dart';
-import 'package:crypto_test/screens/detail_screen/detail_screen.dart';
-import 'package:crypto_test/widgets/coin_cart.dart';
-import 'package:crypto_test/widgets/search_bar.dart';
+import '../../blocs/list_coins_bloc/list_coins_bloc.dart';
+import '../../blocs/list_coins_bloc/list_coins_event.dart';
+import '../../blocs/list_coins_bloc/list_coins_state.dart';
+import '../../constaints/colors.dart';
+import '../../constaints/strings.dart';
+import '../../constaints/text_style.dart';
+import '../detail_screen/detail_screen.dart';
+import '../../widgets/coin_cart.dart';
+import '../../widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final maxScrollExtent = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
       if (maxScrollExtent - currentScroll <= _scrollThreadHold) {
-        _bloc.add(FetchListCoins(sparkline: true,currency: 'usd'));
+        _bloc.add(FetchListCoins(sparkline: true, currency: 'usd'));
       }
     });
   }
@@ -81,52 +81,33 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (state is ListCoinsLoaded) {
                             final currentState = state as ListCoinsLoaded;
                             return ListView.builder(
-                              itemCount: state.hasReachedEnd!
-                                  ? state.listCoins!.length
-                                  : state.listCoins!.length + 1,
-                              controller: _scrollController,
+                              itemCount: state.listCoins!.length,
                               itemBuilder: (BuildContext context, int index) {
-                                ///if scroll to end but still wait api response, it show process indicator
-                                if (index >= state.listCoins!.length) {
-                                  return Container(
-                                    child: Center(
-                                      child: SizedBox(
-                                        width: 50,
-                                        height: 50,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 1.5,
-                                        ),
-                                      ),
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => DetailScreen(
+                                                state.listCoins![index])));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: CoinCart(
+                                      image:
+                                          currentState.listCoins![index].image!,
+                                      name:
+                                          currentState.listCoins![index].name!,
+                                      symbol: currentState
+                                          .listCoins![index].symbol!,
+                                      price: currentState
+                                          .listCoins![index].current_price,
+                                      price_change: currentState
+                                          .listCoins![index].price_change_24h,
                                     ),
-                                  );
-                                } else {
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DetailScreen(
-                                                      state.listCoins![index])));
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: CoinCart(
-                                        image:
-                                            currentState.listCoins![index].image!,
-                                        name:
-                                            currentState.listCoins![index].name!,
-                                        symbol: currentState
-                                            .listCoins![index].symbol!,
-                                        price: currentState
-                                            .listCoins![index].current_price,
-                                        price_change: currentState
-                                            .listCoins![index].price_change_24h,
-                                      ),
-                                    ),
-                                  );
-                                }
+                                  ),
+                                );
                               },
                             );
                           } else if (state is ListCoinsLoading) {

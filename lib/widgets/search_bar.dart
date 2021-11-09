@@ -1,7 +1,7 @@
-import 'package:crypto_test/constaints/strings.dart';
-import 'package:crypto_test/constaints/text_style.dart';
-import 'package:crypto_test/model/coins.dart';
-import 'package:crypto_test/screens/detail_screen/detail_screen.dart';
+import '../constaints/strings.dart';
+import '../constaints/text_style.dart';
+import '../model/coins.dart';
+import '../screens/detail_screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
@@ -75,7 +75,6 @@ class _SearchBarState extends State<SearchBar> {
                   child: Container(
                     width: 300,
                     child: ListView.builder(
-                      padding: EdgeInsets.all(10.0),
                       itemCount: options.length,
                       itemBuilder: (BuildContext context, int index) {
                         final Coins option = options.elementAt(index);
@@ -85,8 +84,11 @@ class _SearchBarState extends State<SearchBar> {
                           },
                           child: Card(
                             child: ListTile(
-                              leading: Image.network(option.image ??
-                                  'https://github.com/flutter/plugins/raw/master/packages/video_player/video_player/doc/demo_ipod.gif?raw=true'),
+                              leading: Image.network(
+                                option.image!,
+                                errorBuilder: (context, error, strackTrace) =>
+                                    Icon(Icons.error),
+                              ),
                               title: Text(
                                 option.name!,
                                 style: TextStylesApp.nameCoin,

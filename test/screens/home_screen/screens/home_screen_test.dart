@@ -15,7 +15,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../mock_data/coins_mock_data.dart';
 
-class MockAlbumBloc extends MockBloc<ListCoinsEvent, ListCoinsState>
+class MockCoinBloc extends MockBloc<ListCoinsEvent, ListCoinsState>
     implements ListCoinsBloc {}
 
 class MockCoinService extends Mock implements CoinService {}
@@ -41,7 +41,7 @@ main() {
 
     setUp(() {
       coinService = MockCoinService();
-      coinsBloc = MockAlbumBloc();
+      coinsBloc = MockCoinBloc();
     });
 
     tearDown(() {
@@ -60,13 +60,13 @@ main() {
     });
 
     testWidgets(
-        'Should render red text with error message when coin bloc state is [ListCoinsLoadFail]',
+        'Should render error text with error message when coin bloc state is [ListCoinsLoadFail]',
         (tester) async {
       final errorMessage = 'Exception: Failed to load coins list';
-      when(() => coinsBloc.state).thenReturn(ListCoinsLoadFail(error: errorMessage));
+      when(() => coinsBloc.state)
+          .thenReturn(ListCoinsLoadFail(error: errorMessage));
       await tester.pumpWidget(widget);
       await tester.pump();
-
       final errorMessageFinder = find.text(errorMessage);
       expect(errorMessageFinder, findsOneWidget);
     });
@@ -76,11 +76,9 @@ main() {
         (tester) async {
       when(() => coinsBloc.state).thenReturn(ListCoinsLoaded(
           listCoins: List<Coins>.from(
-              mockResponse.map((model) => Coins.fromJson(model))).toList(),
-          hasReachedEnd: true));
+              mockResponse.map((model) => Coins.fromJson(model))).toList(),));
       await tester.pumpWidget(widget);
       await tester.pumpAndSettle();
-
       final coinCardFinder = find.descendant(
           of: find.byType(ListView), matching: find.byType(CoinCart));
       expect(coinCardFinder, findsNWidgets(2));

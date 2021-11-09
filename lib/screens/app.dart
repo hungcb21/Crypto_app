@@ -1,10 +1,11 @@
-import 'package:crypto_test/blocs/list_coins_bloc/list_coins_bloc.dart';
-import 'package:crypto_test/blocs/list_coins_bloc/list_coins_event.dart';
-import 'package:crypto_test/screens/home_screen/home_screen.dart';
-import 'package:crypto_test/services/app_coin_services.dart';
+import '../blocs/list_coins_bloc/list_coins_bloc.dart';
+import '../blocs/list_coins_bloc/list_coins_event.dart';
+import 'home_screen/home_screen.dart';
+import '../services/app_coin_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: BlocProvider(
-            create: (context) => ListCoinsBloc(service: AppCoinService(httpClient))
-              ..add(FetchListCoins(currency: 'usd', sparkline: true)),
+            create: (context) =>
+                ListCoinsBloc(service: AppCoinService(httpClient))
+                  ..add(FetchListCoins(currency: 'usd', sparkline: true)),
             child: HomeScreen()),
       ),
     );
