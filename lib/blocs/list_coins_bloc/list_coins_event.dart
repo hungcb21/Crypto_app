@@ -7,8 +7,8 @@ abstract class ListCoinsEvent extends Equatable{
 }
 
 class FetchListCoins extends ListCoinsEvent{
-  String currency;
-  bool sparkline;
+  String? currency;
+  bool? sparkline;
 
-  FetchListCoins({required this.currency,required this.sparkline});
+  FetchListCoins({ this.currency, this.sparkline});
 }

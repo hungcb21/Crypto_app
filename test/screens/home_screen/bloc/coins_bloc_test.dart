@@ -12,26 +12,26 @@ class MockCointEvent extends ListCoinsEvent {}
 class MockCoinService extends Mock implements CoinSevice {}
 
 void main() {
-  CoinSevice albumService;
-  ListCoinsBloc? albumBloc;
+  CoinSevice coinsService;
+  ListCoinsBloc? coinsBloc;
 
   setUp(() {
-    albumService = MockCoinService();
-    albumBloc = ListCoinsBloc();
+    coinsService = MockCoinService();
+    coinsBloc = ListCoinsBloc();
   });
 
   tearDown(() {
-    albumBloc?.close();
+    coinsBloc?.close();
   });
 
   blocTest('emits [] when no event is added',
       build: () => ListCoinsBloc(), expect: () => []);
 
   blocTest(
-    'emits [AlbumLoádsaadInProgress] then [AlbumLoadSucess] when [AlbumRequested] is called',
+    'emits [ListCoinLoading] then [ListCoinLoaded] when [FetchListCoins] is called',
     build: () {
-      albumService = MockCoinService();
-      return ListCoinsBloc(service: albumService);
+      coinsService = MockCoinService();
+      return ListCoinsBloc(service: coinsService);
     },
     act: (ListCoinsBloc bloc) =>
         bloc.add(FetchListCoins(currency: 'usd', sparkline: true)),
@@ -39,16 +39,16 @@ void main() {
   );
 
   blocTest(
-    'emits [AlbumLoadInProgress] then [AlbumLoadSucess] when [AlbumRequested] is called',
+    'emits [ListCoinsLoadFail] when [FetchListCoins] is called and service throws error.',
     build: () {
-      albumService = MockCoinService();
-      when(albumService.getCoinsFromAPI(
+      coinsService = MockCoinService();
+      when(coinsService.getCoinsFromAPI(
               currency: '', start: 1, limit: 2, sparkline: true))
           .thenThrow(Exception());
-      return ListCoinsBloc(service: albumService);
+      return ListCoinsBloc(service: coinsService);
     },
-    act: (ListCoinsBloc bloc) =>
-        bloc.add(FetchListCoins(currency: '', sparkline: true)),
-    expect: () => [ListCoinsLoading(), ListCoinsLoadFail()],
+    act: (ListCoinsBloc bloc) => bloc.add(FetchListCoins()),
+    expect: () =>
+        [ListCoinsLoading(), ListCoinsLoadFail(error: Exception().toString())],
   );
 }
