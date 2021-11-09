@@ -7,7 +7,7 @@ import 'package:crypto_test/services/coin_service.dart';
 import 'package:http/http.dart' as http;
 
 final String FINAL_API_URL = 'https://api.coingecko.com/api/v3/coins';
-class AppCoinService{
+class AppCoinService extends CoinSevice{
   Future<List<Coins>> getCoinsFromAPI (
       {required String currency,
         required int start,

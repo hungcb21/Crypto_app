@@ -1,13 +1,13 @@
 import 'package:crypto_test/blocs/list_coins_bloc/list_coins_event.dart';
 import 'package:crypto_test/blocs/list_coins_bloc/list_coins_state.dart';
-import 'package:crypto_test/model/coins.dart';
-import 'package:crypto_test/services/app_coin_services.dart';
+import 'package:crypto_test/services/coin_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
-  ListCoinsBloc() : super(ListCoinsEmpty());
+  ListCoinsBloc({this.service}) : super(ListCoinsEmpty());
   final NUMBER_OF_COINS_PER_STATE = 20;
-  AppCoinService service = AppCoinService();
+  CoinSevice? service;
+
   @override
   Stream<ListCoinsState> mapEventToState(ListCoinsEvent event) async* {
     // TODO: implement mapEventToState
@@ -17,13 +17,14 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
       try {
         if (state is ListCoinsEmpty) {
           yield ListCoinsLoading();
+
           ///get coins when list empty and not scroll to end
-          final coins = await service.getCoinsFromAPI(
+          final coins = await service!.getCoinsFromAPI(
               currency: event.currency,
               start: 1,
               limit: NUMBER_OF_COINS_PER_STATE,
               sparkline: event.sparkline);
-          yield ListCoinsLoaded(coins, false);
+          yield ListCoinsLoaded(coins!, false);
         } else if (state is ListCoinsLoaded) {
           final currentState = state as ListCoinsLoaded;
 
@@ -31,12 +32,12 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
           int finalIndexOfCurrentPage = currentState.listCoins.length;
 
           ///get list when scroll to end of list
-          final coins = await service.getCoinsFromAPI(
+          final coins = await service!.getCoinsFromAPI(
               currency: event.currency,
               start: finalIndexOfCurrentPage,
               limit: NUMBER_OF_COINS_PER_STATE,
               sparkline: event.sparkline);
-          if (coins.isEmpty) {
+          if (coins!.isEmpty) {
             yield currentState.cloneWith(hasReachedEnd: true);
           } else {
             yield ListCoinsLoaded(currentState.listCoins + coins, false);
