@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   BlocBuilder<ListCoinsBloc, ListCoinsState>(
                       builder: (context, state) {
                     if (state is ListCoinsLoaded) {
-                      return SearchBar(state.listCoins);
+                      return SearchBar(state.listCoins!);
                     }
                     return SearchBar([]);
                   }),
@@ -81,13 +81,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (state is ListCoinsLoaded) {
                             final currentState = state as ListCoinsLoaded;
                             return ListView.builder(
-                              itemCount: state.hasReachedEnd
-                                  ? state.listCoins.length
-                                  : state.listCoins.length + 1,
+                              itemCount: state.hasReachedEnd!
+                                  ? state.listCoins!.length
+                                  : state.listCoins!.length + 1,
                               controller: _scrollController,
                               itemBuilder: (BuildContext context, int index) {
                                 ///if scroll to end but still wait api response, it show process indicator
-                                if (index >= state.listCoins.length) {
+                                if (index >= state.listCoins!.length) {
                                   return Container(
                                     child: Center(
                                       child: SizedBox(
@@ -107,22 +107,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailScreen(
-                                                      state.listCoins[index])));
+                                                      state.listCoins![index])));
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10),
                                       child: CoinCart(
                                         image:
-                                            currentState.listCoins[index].image,
+                                            currentState.listCoins![index].image,
                                         name:
-                                            currentState.listCoins[index].name,
+                                            currentState.listCoins![index].name,
                                         symbol: currentState
-                                            .listCoins[index].symbol,
+                                            .listCoins![index].symbol,
                                         price: currentState
-                                            .listCoins[index].current_price,
+                                            .listCoins![index].current_price,
                                         price_change: currentState
-                                            .listCoins[index].price_change_24h,
+                                            .listCoins![index].price_change_24h,
                                       ),
                                     ),
                                   );
@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else if (state is ListCoinsLoadFail) {
                             return Center(
                               child: Text(
-                                state.error,
+                                state.error!,
                                 style: TextStylesApp.listCoinsError,
                               ),
                             );

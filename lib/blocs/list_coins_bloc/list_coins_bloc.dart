@@ -13,7 +13,7 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
     // TODO: implement mapEventToState
     if (event is FetchListCoins &&
         !(state is ListCoinsLoaded &&
-            (state as ListCoinsLoaded).hasReachedEnd)) {
+            (state as ListCoinsLoaded).hasReachedEnd!)) {
       try {
         if (state is ListCoinsEmpty) {
           yield ListCoinsLoading();
@@ -24,12 +24,12 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
               start: 1,
               limit: NUMBER_OF_COINS_PER_STATE,
               sparkline: event.sparkline);
-          yield ListCoinsLoaded(coins!, false);
+          yield ListCoinsLoaded(listCoins: coins, hasReachedEnd: false);
         } else if (state is ListCoinsLoaded) {
           final currentState = state as ListCoinsLoaded;
 
           ///get index of item in end of list
-          int finalIndexOfCurrentPage = currentState.listCoins.length;
+          int finalIndexOfCurrentPage = currentState.listCoins!.length;
 
           ///get list when scroll to end of list
           final coins = await service!.getCoinsFromAPI(
@@ -40,11 +40,13 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
           if (coins!.isEmpty) {
             yield currentState.cloneWith(hasReachedEnd: true);
           } else {
-            yield ListCoinsLoaded(currentState.listCoins + coins, false);
+            yield ListCoinsLoaded(
+                listCoins: currentState.listCoins! + coins,
+                hasReachedEnd: false);
           }
         }
       } catch (e) {
-        yield ListCoinsLoadFail(e.toString());
+        yield ListCoinsLoadFail(error: e.toString());
       }
     }
   }

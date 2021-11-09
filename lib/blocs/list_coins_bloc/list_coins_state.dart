@@ -12,22 +12,22 @@ class ListCoinsEmpty extends ListCoinsState {}
 class ListCoinsLoading extends ListCoinsState {}
 
 class ListCoinsLoaded extends ListCoinsState {
-  final List<Coins> listCoins;
-  final bool hasReachedEnd;
+  final List<Coins>? listCoins;
+  final bool? hasReachedEnd;
 
-   ListCoinsLoaded(this.listCoins, this.hasReachedEnd);
+   ListCoinsLoaded({this.listCoins, this.hasReachedEnd});
 
   @override
   // TODO: implement props
-  List<Object> get props => [listCoins, hasReachedEnd];
+  List<Object?> get props => [listCoins, hasReachedEnd];
   ListCoinsLoaded cloneWith({List<Coins>? listCoins, bool? hasReachedEnd}) {
     return ListCoinsLoaded(
-        listCoins ?? this.listCoins, hasReachedEnd ?? this.hasReachedEnd);
+        listCoins: listCoins ?? this.listCoins,hasReachedEnd:  hasReachedEnd ?? this.hasReachedEnd);
   }
 }
 
 class ListCoinsLoadFail extends ListCoinsState {
-  String error;
+  String? error;
 
-  ListCoinsLoadFail(this.error);
+  ListCoinsLoadFail({this.error});
 }
