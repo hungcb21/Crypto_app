@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class Coins {
   String? id;
   String? name;

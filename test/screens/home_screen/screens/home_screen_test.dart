@@ -5,6 +5,7 @@ import 'package:crypto_test/blocs/list_coins_bloc/list_coins_bloc.dart';
 import 'package:crypto_test/blocs/list_coins_bloc/list_coins_event.dart';
 import 'package:crypto_test/blocs/list_coins_bloc/list_coins_state.dart';
 import 'package:crypto_test/model/coins.dart';
+import 'package:crypto_test/screens/detail_screen/detail_screen.dart';
 import 'package:crypto_test/screens/home_screen/home_screen.dart';
 import 'package:crypto_test/services/coin_service.dart';
 import 'package:crypto_test/widgets/coin_cart.dart';
@@ -24,7 +25,36 @@ class FakeCoinState extends Fake implements ListCoinsState {}
 
 class FakeCoinEvent extends Fake implements ListCoinsEvent {}
 
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
+
 main() {
+  String image = '';
+  String name = 'bitcoin';
+  String symbol = 'btc';
+  var price = 12345;
+  var price_change = 324234;
+  final coin = Coins(
+      id: '1',
+      name: name,
+      symbol: symbol,
+      image: image,
+      current_price: price,
+      high_24h: price,
+      low_24h: price,
+      price_change_24h: price_change,
+      ath: price,
+      ath_change_percentage: price,
+      ath_date: price,
+      atl: price,
+      atl_change_percentage: price,
+      atl_date: price,
+      last_updated: price,
+      sparkline_in_7d: [
+        14234.123123,
+        234232.12321,
+        2343243.12312,
+        2342342344.123213
+      ]);
   final mockResponse = json.decode(mockCoinsData);
 
   setUpAll(() {
@@ -35,6 +65,7 @@ main() {
   group('Home Screen Tests', () {
     late CoinService coinService;
     late ListCoinsBloc coinsBloc;
+
     var widget = MaterialApp(
       home: BlocProvider(create: (context) => coinsBloc, child: HomeScreen()),
     );
@@ -75,12 +106,14 @@ main() {
         'Should render CoinCart list when bloc state is [ListCoinsLoaded]',
         (tester) async {
       when(() => coinsBloc.state).thenReturn(ListCoinsLoaded(
-          listCoins: List<Coins>.from(
-              mockResponse.map((model) => Coins.fromJson(model))).toList(),));
+        listCoins:
+            List<Coins>.from(mockResponse.map((model) => Coins.fromJson(model)))
+                .toList(),
+      ));
       await tester.pumpWidget(widget);
       await tester.pumpAndSettle();
       final coinCardFinder = find.descendant(
-          of: find.byType(ListView), matching: find.byType(CoinCart));
+          of: find.byType(ListView), matching: find.byType(CoinCard));
       expect(coinCardFinder, findsNWidgets(2));
     });
   });

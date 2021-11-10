@@ -1,9 +1,8 @@
-import 'package:crypto_test/model/coins.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../services/coin_service.dart';
 import 'list_coins_event.dart';
 import 'list_coins_state.dart';
-import '../../services/coin_service.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
   ListCoinsBloc({this.service}) : super(ListCoinsEmpty());
@@ -22,10 +21,9 @@ class ListCoinsBloc extends Bloc<ListCoinsEvent, ListCoinsState> {
             limit: NUMBER_OF_COINS_PER_STATE,
             sparkline: event.sparkline!);
         yield ListCoinsLoaded(listCoins: coins);
-        } catch (e)
-        {
-          yield ListCoinsLoadFail(error: e.toString());
-        }
+      } catch (e) {
+        yield ListCoinsLoadFail(error: e.toString());
       }
     }
+  }
 }

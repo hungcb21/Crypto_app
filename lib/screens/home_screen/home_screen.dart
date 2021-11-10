@@ -1,14 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../blocs/list_coins_bloc/list_coins_bloc.dart';
-import '../../blocs/list_coins_bloc/list_coins_event.dart';
 import '../../blocs/list_coins_bloc/list_coins_state.dart';
 import '../../constaints/colors.dart';
 import '../../constaints/strings.dart';
 import '../../constaints/text_style.dart';
-import '../detail_screen/detail_screen.dart';
 import '../../widgets/coin_cart.dart';
 import '../../widgets/search_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../detail_screen/detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,23 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _scrollController = ScrollController();
-  final _scrollThreadHold = 500.0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    ListCoinsBloc _bloc = BlocProvider.of(context);
-    _scrollController.addListener(() {
-      final maxScrollExtent = _scrollController.position.maxScrollExtent;
-      final currentScroll = _scrollController.position.pixels;
-      if (maxScrollExtent - currentScroll <= _scrollThreadHold) {
-        _bloc.add(FetchListCoins(sparkline: true, currency: 'usd'));
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,29 +66,27 @@ class _HomeScreenState extends State<HomeScreen> {
                             return ListView.builder(
                               itemCount: state.listCoins!.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => DetailScreen(
-                                                state.listCoins![index])));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    child: CoinCart(
-                                      image:
-                                          currentState.listCoins![index].image!,
-                                      name:
-                                          currentState.listCoins![index].name!,
-                                      symbol: currentState
-                                          .listCoins![index].symbol!,
-                                      price: currentState
-                                          .listCoins![index].current_price,
-                                      price_change: currentState
-                                          .listCoins![index].price_change_24h,
-                                    ),
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: CoinCard(
+                                    image:
+                                        currentState.listCoins![index].image!,
+                                    name: currentState.listCoins![index].name!,
+                                    symbol:
+                                        currentState.listCoins![index].symbol!,
+                                    price: currentState
+                                        .listCoins![index].current_price,
+                                    price_change: currentState
+                                        .listCoins![index].price_change_24h,
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailScreen(state
+                                                      .listCoins![index])));
+                                    },
                                   ),
                                 );
                               },
