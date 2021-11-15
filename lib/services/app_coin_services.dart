@@ -17,25 +17,17 @@ class AppCoinService extends CoinService {
       required int start,
       required int limit,
       required bool sparkline}) async {
-    // final url = Uri(
-    //   scheme: 'https',
-    //   host: AppConfig.instance.getValue(AppConstants.HOST_NAME),
-    //   path: AppConfig.instance.getValue(AppConstants.COIN_PATH+AppConstants.MARKET_PATH +
-    //       AppConstants.CURRENCY +
-    //       '$currency' +
-    //       AppConstants.ORDER+AppConstants.LIMIT+'$limit'+AppConstants.START+'$start'+AppConstants.SPARKLINE+'$sparkline'),
-    // );
-    var url = Uri.parse(FINAL_API_URL +
-        AppConstants.COIN_PATH +
-        AppConstants.MARKET_PATH +
-        AppConstants.CURRENCY +
+    var url = Uri.parse( AppConfig.instance.getValue(AppConstants.HOST_NAME) +
+        AppConfig.instance.getValue(AppConstants.COIN_PATH) +
+        AppConfig.instance.getValue(AppConstants.MARKET_PATH) +
+        AppConfig.instance.getValue(AppConstants.CURRENCY) +
         '$currency' +
-        AppConstants.ORDER +
-        AppConstants.LIMIT +
+        AppConfig.instance.getValue(AppConstants.ORDER) +
+        AppConfig.instance.getValue(AppConstants.LIMIT) +
         '$limit' +
-        AppConstants.START +
+        AppConfig.instance.getValue(AppConstants.START) +
         '$start' +
-        AppConstants.SPARKLINE +
+        AppConfig.instance.getValue(AppConstants.SPARKLINE) +
         '$sparkline');
     final response = await client.get(url);
     if (response.statusCode == 200) {

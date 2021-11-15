@@ -1,5 +1,6 @@
-import '../constaints/text_style.dart';
 import 'package:flutter/material.dart';
+
+import '../constaints/text_style.dart';
 
 class CoinCard extends StatelessWidget {
   VoidCallback onTap;
@@ -39,7 +40,8 @@ class CoinCard extends StatelessWidget {
         ),
         child: ListTile(
           leading: Image.network(
-            image!,
+            image ??
+                "https://www.facebook.com/photo/?fbid=2940773096158854&set=a.1684300095139500",
             errorBuilder: (context, error, strackTrace) => Icon(Icons.error),
           ),
           title: Text(

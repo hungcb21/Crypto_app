@@ -1,3 +1,5 @@
+import 'package:crypto_test/constaints/routes.dart';
+
 import '../constaints/strings.dart';
 import '../constaints/text_style.dart';
 import '../model/coins.dart';
@@ -14,7 +16,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  String _displayStringForOption(Coins option) => option.name!;
+  String _displayStringForOption(Coins option) => option.name;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +92,7 @@ class _SearchBarState extends State<SearchBar> {
                                     Icon(Icons.error),
                               ),
                               title: Text(
-                                option.name!,
+                                option.name,
                                 style: TextStylesApp.nameCoin,
                               ),
                             ),
@@ -102,10 +104,10 @@ class _SearchBarState extends State<SearchBar> {
                 );
               },
               onSelected: (Coins selection) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DetailScreen(selection)));
+                Navigator.pushNamed(
+                  context, RouteConstant.detailRoute,
+                  arguments: selection,
+                );
               },
             ),
           ),

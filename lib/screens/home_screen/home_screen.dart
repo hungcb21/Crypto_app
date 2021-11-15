@@ -1,3 +1,8 @@
+import 'package:crypto_test/blocs/list_coins_bloc/list_coins_event.dart';
+
+import '../../config/app_config.dart';
+import '../../config/constants.dart';
+import '../../constaints/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    print(AppConfig.instance.getValue(AppConstants.SPARKLINE));
     return Scaffold(
       backgroundColor: ColorsApp.backgroundColor,
       body: SafeArea(
@@ -63,39 +69,43 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (BuildContext context, state) {
                           if (state is ListCoinsLoaded) {
                             final currentState = state as ListCoinsLoaded;
-                            return ListView.builder(
-                              itemCount: state.listCoins!.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: CoinCard(
-                                    image:
-                                        currentState.listCoins![index].image!,
-                                    name: currentState.listCoins![index].name!,
-                                    symbol:
-                                        currentState.listCoins![index].symbol!,
-                                    price: currentState
-                                        .listCoins![index].current_price,
-                                    price_change: currentState
-                                        .listCoins![index].price_change_24h,
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DetailScreen(state
-                                                      .listCoins![index])));
-                                    },
-                                  ),
-                                );
-                              },
+                            return RefreshIndicator(onRefresh: ()async{
+                              context.read<ListCoinsBloc>().add(FetchListCoins(currency: 'usd',sparkline: true));
+                            },
+                              child: ListView.builder(
+                                itemCount: state.listCoins!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 10),
+                                    child: CoinCard(
+                                      image:
+                                          currentState.listCoins![index].image!,
+                                      name: currentState.listCoins![index].name,
+                                      symbol:
+                                          currentState.listCoins![index].symbol,
+                                      price: currentState
+                                              .listCoins![index].current_price ??
+                                          0,
+                                      price_change: currentState.listCoins![index]
+                                              .price_change_24h ??
+                                          0,
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, RouteConstant.detailRoute,
+                                          arguments: currentState.listCoins![index],
+                                            );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
                             );
-                          } else if (state is ListCoinsLoading) {
+                          }  if (state is ListCoinsLoading) {
                             return Center(
                               child: CircularProgressIndicator(),
                             );
-                          } else if (state is ListCoinsLoadFail) {
+                          }  if (state is ListCoinsLoadFail) {
                             return Center(
                               child: Text(
                                 state.error!,

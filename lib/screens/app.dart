@@ -1,3 +1,6 @@
+import '../constaints/routes.dart';
+import '../routes/app_route.dart';
+
 import '../blocs/list_coins_bloc/list_coins_bloc.dart';
 import '../blocs/list_coins_bloc/list_coins_event.dart';
 import 'home_screen/home_screen.dart';
@@ -21,6 +24,8 @@ class MyApp extends StatelessWidget {
       },
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        onGenerateRoute: AppRoute.generateRoute,
+        initialRoute: RouteConstant.welcomeRoute,
         home: BlocProvider(
             create: (context) =>
                 ListCoinsBloc(service: AppCoinService(httpClient))
