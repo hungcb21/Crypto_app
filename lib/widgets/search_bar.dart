@@ -3,7 +3,6 @@ import 'package:crypto_test/constaints/routes.dart';
 import '../constaints/strings.dart';
 import '../constaints/text_style.dart';
 import '../model/coins.dart';
-import '../screens/detail_screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
@@ -105,7 +104,8 @@ class _SearchBarState extends State<SearchBar> {
               },
               onSelected: (Coins selection) {
                 Navigator.pushNamed(
-                  context, RouteConstant.detailRoute,
+                  context,
+                  RouteConstant.detailRoute,
                   arguments: selection,
                 );
               },

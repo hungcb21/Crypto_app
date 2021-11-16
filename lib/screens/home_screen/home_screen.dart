@@ -69,9 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (BuildContext context, state) {
                           if (state is ListCoinsLoaded) {
                             final currentState = state as ListCoinsLoaded;
-                            return RefreshIndicator(onRefresh: ()async{
-                              context.read<ListCoinsBloc>().add(FetchListCoins(currency: 'usd',sparkline: true));
-                            },
+                            return RefreshIndicator(
+                              onRefresh: () async {
+                                context.read<ListCoinsBloc>().add(FetchListCoins(currency: 'usd',sparkline: true));
+                              } ,
                               child: ListView.builder(
                                 itemCount: state.listCoins!.length,
                                 itemBuilder: (BuildContext context, int index) {
@@ -106,11 +107,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: CircularProgressIndicator(),
                             );
                           }  if (state is ListCoinsLoadFail) {
-                            return Center(
-                              child: Text(
-                                state.error!,
-                                style: TextStylesApp.listCoinsError,
-                              ),
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    state.error!,
+                                    style: TextStylesApp.listCoinsError,
+                                  ),
+                                ),
+                                FloatingActionButton(
+                                  onPressed:() async {
+                                    context.read<ListCoinsBloc>().add(FetchListCoins(currency: 'usd',sparkline: true));
+                                  } ,
+                                  child: new Icon(Icons.refresh),
+                                  backgroundColor: Colors.red,
+                                ),
+                              ],
                             );
                           }
                           return Center(child: Text(StringData.listEmpty));

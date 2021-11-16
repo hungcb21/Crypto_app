@@ -42,6 +42,7 @@ main() {
   CustomBindings();
   TestWidgetsFlutterBinding.ensureInitialized();
   String image = '';
+  final listName = 'Coins';
   String name = 'bitcoin';
   String symbol = 'btc';
   var price = 12345;
@@ -116,11 +117,12 @@ main() {
           of: find.byType(ListView), matching: find.byType(CoinCard).first);
       await tester.tap(coinCardFinder);
       await tester.pumpAndSettle();
-
       verify(() => mockObserver.didPush(any(), any())).called(2);
     });
 
-    testWidgets('Should refresh list coin', (tester) async {
+
+    testWidgets('Should refresh list coin when scroll', (tester) async {
+      bool refreshCalled = false;
       when(() => coinsBloc.state).thenReturn(ListCoinsLoaded(
         listCoins:
             List<Coins>.from(mockResponse.map((model) => Coins.fromJson(model)))
@@ -128,10 +130,25 @@ main() {
       ));
       await tester.pumpWidget(widget);
       await tester.pumpAndSettle();
-      expect(tester.getCenter(find.byType(RefreshIndicator)).dy, lessThan(500));
+      final coinCardFinder = find.descendant(
+          of: find.byType(ListView), matching: find.byType(CoinCard).first);
+      await tester.fling(coinCardFinder, const Offset(0.0, 100.0), 1000.0);
+      await tester.pump();
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
+      expect(refreshCalled, false);
+    });
+
+    testWidgets('Should refresh list coin', (tester) async {
+      final errorMessage = 'Exception: Failed to load coins list';
+      when(() => coinsBloc.state)
+          .thenReturn(ListCoinsLoadFail(error: errorMessage));
+      await tester.pumpWidget(widget);
+      await tester.pump();
+      final errorMessageFinder = find.byType(FloatingActionButton);
+      expect(errorMessageFinder, findsOneWidget);
+      await tester.tap(errorMessageFinder);
     });
 
     testWidgets(
@@ -144,6 +161,15 @@ main() {
       final indicatorFinder = find.byType(CircularProgressIndicator);
       expect(indicatorFinder, findsOneWidget);
     });
+
+    testWidgets(
+        'Should render list empty  when coin bloc state is []',
+            (tester) async {
+          when(() => coinsBloc.state).thenReturn(ListCoinsEmpty());
+          await tester.pumpWidget(widget);
+          await tester.pump();
+              expect(find.text('Other  as..'), findsOneWidget);
+        });
 
     testWidgets(
         'Should render error text with error message when coin bloc state is [ListCoinsLoadFail]',
@@ -172,6 +198,31 @@ main() {
       expect(coinCardFinder, findsNWidgets(2));
     });
 
+    testWidgets(
+        'Should render SearchBar  when bloc state is [ListCoinsLoaded]',
+            (tester) async {
+          when(() => coinsBloc.state).thenReturn(ListCoinsLoaded(
+            listCoins:
+            List<Coins>.from(mockResponse.map((model) => Coins.fromJson(model)))
+                .toList(),
+          ));
+          await tester.pumpWidget(widget);
+          await tester.pumpAndSettle();
+          expect(find.byType(SearchBar), findsOneWidget);
+        });
+    testWidgets(
+        'Should render CoinCart list when bloc state is [ListCoinsLoaded]',
+            (tester) async {
+          when(() => coinsBloc.state).thenReturn(ListCoinsLoaded(
+            listCoins:
+            List<Coins>.from(mockResponse.map((model) => Coins.fromJson(model)))
+                .toList(),
+          ));
+          await tester.pumpWidget(widget);
+          await tester.pumpAndSettle();
+          expect(find.text(listName), findsOneWidget);
+        });
+
     testWidgets('Should search Coin when bloc state is [ListCoinsLoaded]',
         (tester) async {
       when(() => coinsBloc.state).thenReturn(ListCoinsLoaded(
@@ -182,16 +233,14 @@ main() {
       await tester.pumpWidget(widget);
       await tester.pumpAndSettle();
       await tester.tap(find.byType(SearchBar));
-      await tester.enterText(find.byType(SearchBar), 'bitcoin');
+      await tester.enterText(find.byType(SearchBar), 'bit');
       await tester.pump(const Duration(seconds: 1));
-      await tester.pumpWidget(
-        Align(
-          alignment: Alignment.topLeft,
-          child: Container(
-            width: 300,
-          ),
-        ),
-      );
+      final coinCardFinder = find.descendant(
+          of: find.byType(ListView), matching: find.byType(Card).first);
+      expect(coinCardFinder, findsOneWidget);
+      await tester.tap(coinCardFinder);
+      await tester.pumpAndSettle();
+      verify(() => mockObserver.didPush(any(), any())).called(10);
     });
   });
 }

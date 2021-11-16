@@ -3,7 +3,6 @@ import 'package:crypto_test/model/coins.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 class DetailScreen extends StatefulWidget {
   Coins coins;
   DetailScreen(this.coins);
@@ -31,21 +30,13 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       backgroundColor: ColorsApp.backgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         elevation: 0,
         backwardsCompatibility: false,
         systemOverlayStyle:
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+            SystemUiOverlayStyle(statusBarColor: Colors.transparent),
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            size: 40,
-          ),
-          onPressed: () {
-            canPop();
-          },
-        ),
       ),
       body: Column(
         children: [
@@ -75,7 +66,5 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  void canPop() {
-    Navigator.pop(context);
-  }
+
 }
