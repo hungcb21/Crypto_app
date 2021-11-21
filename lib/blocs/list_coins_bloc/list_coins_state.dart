@@ -19,6 +19,8 @@ class ListCoinsLoaded extends ListCoinsState {
 
 class ListCoinsLoadFail extends ListCoinsState {
   String? error;
-
   ListCoinsLoadFail({this.error});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [error];
 }

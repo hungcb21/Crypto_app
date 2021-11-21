@@ -31,7 +31,7 @@ void main() {
     },
     act: (ListCoinsBloc bloc) =>
         bloc.add(FetchListCoins(currency: 'usd', sparkline: true)),
-    expect: () => [ListCoinsLoading(), ListCoinsLoaded()],
+    expect: ()  => [ListCoinsLoading(), ListCoinsLoaded()],
   );
 
   blocTest(

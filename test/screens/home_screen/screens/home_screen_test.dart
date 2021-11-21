@@ -47,28 +47,6 @@ main() {
   String symbol = 'btc';
   var price = 12345;
   var price_change = 324234;
-  final coin = Coins(
-      id: '1',
-      name: name,
-      symbol: symbol,
-      image: image,
-      current_price: price,
-      high_24h: price,
-      low_24h: price,
-      price_change_24h: price_change,
-      ath: price,
-      ath_change_percentage: price,
-      ath_date: symbol,
-      atl: price,
-      atl_change_percentage: price,
-      atl_date: symbol,
-      last_updated: symbol,
-      sparkline_in_7d: [
-        14234.123123,
-        234232.12321,
-        2343243.12312,
-        2342342344.123213
-      ]);
   final mockResponse = json.decode(mockCoinsData);
 
   setUpAll(() {

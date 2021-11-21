@@ -1,3 +1,5 @@
+import 'package:crypto_test/constaints/strings.dart';
+
 import '../constaints/routes.dart';
 import '../routes/app_route.dart';
 
@@ -14,24 +16,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final httpClient = http.Client();
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus?.unfocus();
-        }
-      },
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: AppRoute.generateRoute,
-        initialRoute: RouteConstant.welcomeRoute,
-        home: BlocProvider(
-            create: (context) =>
-                ListCoinsBloc(service: AppCoinService(httpClient))
-                  ..add(FetchListCoins(currency: 'usd', sparkline: true)),
-            child: HomeScreen()),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: AppRoute.generateRoute,
+      initialRoute: RouteConstant.welcomeRoute,
+      home: BlocProvider(
+          create: (context) =>
+              ListCoinsBloc(service: AppCoinService(httpClient))
+                ..add(FetchListCoins(currency: StringData.USD, sparkline: true)),
+          child: HomeScreen()),
     );
   }
 }

@@ -17,7 +17,7 @@ class AppCoinService extends CoinService {
       required int start,
       required int limit,
       required bool sparkline}) async {
-    var url = Uri.parse( AppConfig.instance.getValue(AppConstants.HOST_NAME) +
+    var url = Uri.parse(AppConfig.instance.getValue(AppConstants.HOST_NAME) +
         AppConfig.instance.getValue(AppConstants.COIN_PATH) +
         AppConfig.instance.getValue(AppConstants.MARKET_PATH) +
         AppConfig.instance.getValue(AppConstants.CURRENCY) +
@@ -29,15 +29,15 @@ class AppCoinService extends CoinService {
         '$start' +
         AppConfig.instance.getValue(AppConstants.SPARKLINE) +
         '$sparkline');
-    final response = await client.get(url);
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body) as List;
+    try {
+      final response = await client.get(url);
+      Iterable  responseData = json.decode(response.body) as List;
       List<Coins> listCoins = responseData.map((coins) {
         return Coins.fromJson(coins);
       }).toList();
       return listCoins;
-    } else {
-      throw Exception('Failed to load coins list');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

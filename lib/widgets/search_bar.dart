@@ -46,6 +46,7 @@ class _SearchBarState extends State<SearchBar> {
                   FocusNode fieldFocusNode,
                   VoidCallback onFieldSubmitted) {
                 return TextField(
+                  autofocus: false,
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: StringData.hintTextSearch),
